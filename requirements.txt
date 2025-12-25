@@ -1,0 +1,7 @@
+fastapi
+alembic
+sqlalchemy
+psycopg2
+python-dotenv
+uliweb-alembic
+pydantic
