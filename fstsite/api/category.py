@@ -29,7 +29,7 @@ async def categories_list(db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail='No categories.')
     return categories_db
 
-@categories_router.get('/', response_model=CategorySchema, summary='Get category by id.', tags=['Categories'])
+@categories_router.get('/{category_id}/', response_model=CategorySchema, summary='Get category by id.', tags=['Categories'])
 async def category_detail(category_id: int, db: Session = Depends(get_db)):
     category_db = db.query(Category).filter(Category.id==category_id).first()
     if not category_db:

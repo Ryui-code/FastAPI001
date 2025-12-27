@@ -11,6 +11,7 @@ class StatusChoices(str, sqlEnum):
 
 class CustomUser(Base):
     __tablename__ = 'custom_user'
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     username: Mapped[str | int] = mapped_column(String(30), unique=True)
     email: Mapped[str] = mapped_column(String(30), unique=True)

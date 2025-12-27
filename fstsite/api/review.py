@@ -29,7 +29,7 @@ async def reviews_list(db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail='No reviews.')
     return reviews_db
 
-@reviews_router.get('/', summary='Get review by id.', tags=['Reviews'])
+@reviews_router.get('/{review_id/}', summary='Get review by id.', tags=['Reviews'])
 async def review_detail(review_id: int, db: Session = Depends(get_db)):
     review_db = db.query(Review).filter(Review.id==review_id).first()
     if not review_db:

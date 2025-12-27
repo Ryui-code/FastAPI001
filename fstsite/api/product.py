@@ -29,7 +29,7 @@ async def products_list(db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail='No products.')
     return products_db
 
-@products_router.get('/', summary='Get product by id.', tags=['Products'])
+@products_router.get('/{product_id}/', summary='Get product by id.', tags=['Products'])
 async def product_detail(product_id: int, db: Session = Depends(get_db)):
     product_db = db.query(Product).filter(Product.id==product_id).first()
     if not product_db:
