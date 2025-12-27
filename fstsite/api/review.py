@@ -1,4 +1,4 @@
-from fstsite.database.schema import ReviewSchema
+from fstsite.database.schema import ReviewOutSchema, ReviewInputSchema
 from fstsite.database.models import Review
 from typing import List
 from sqlalchemy.orm import Session
@@ -14,22 +14,22 @@ async def get_db():
     finally:
         db.close()
 
-@reviews_router.post('/', summary='Create review.', tags=['Reviews'])
-async def create_review(review: ReviewSchema, db: Session = Depends(get_db)):
+@reviews_router.post('/', response_model=ReviewOutSchema, summary='Create review.', tags=['Reviews'])
+async def create_review(review: ReviewInputSchema, db: Session = Depends(get_db)):
     review_db = Review(**review.model_dump())
     db.add(review_db)
     db.commit()
     db.refresh(review_db)
     return review_db
 
-@reviews_router.get('/', response_model=List[ReviewSchema], summary='Get all reviews.', tags=['Reviews'])
+@reviews_router.get('/', response_model=List[ReviewOutSchema], summary='Get all reviews.', tags=['Reviews'])
 async def reviews_list(db: Session = Depends(get_db)):
     reviews_db = db.query(Review).all()
     if not reviews_db:
         raise HTTPException(status_code=404, detail='No reviews.')
     return reviews_db
 
-@reviews_router.get('/{review_id/}', summary='Get review by id.', tags=['Reviews'])
+@reviews_router.get('/{review_id/}', response_model=ReviewOutSchema, summary='Get review by id.', tags=['Reviews'])
 async def review_detail(review_id: int, db: Session = Depends(get_db)):
     review_db = db.query(Review).filter(Review.id==review_id).first()
     if not review_db:
