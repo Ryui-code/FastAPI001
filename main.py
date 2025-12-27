@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from fstsite.api import users, category, product, review
 app = FastAPI()

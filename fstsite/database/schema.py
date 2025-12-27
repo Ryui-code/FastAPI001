@@ -15,7 +15,6 @@ class CustomUserOutSchema(BaseModel):
     phone_number: Optional[str]
     status: StatusChoices = StatusChoices.inactive
     data_registered: date
-
 class CustomUserInputSchema(BaseModel):
     username: str | int = Field(min_length=3, max_length=30)
     password: int | str = Field(min_length=6, max_length=30)
@@ -27,7 +26,6 @@ class CustomUserInputSchema(BaseModel):
 class CategoryInputSchema(BaseModel):
     category_image: str
     category_name: str = Field(min_length=3, max_length=30)
-
 class CategoryOutSchema(BaseModel):
     id: int
     category_image: str
@@ -41,7 +39,6 @@ class ProductInputSchema(BaseModel):
     article_number: int
     description: str
     product_video: str
-
 class ProductOutSchema(BaseModel):
     id: int
     category_id: int
@@ -57,7 +54,6 @@ class ReviewInputSchema(BaseModel):
     user_id: int
     product_id: int
     stars: int = Field(le=5)
-
 class ReviewOutSchema(BaseModel):
     id: int
     user_id: int
