@@ -26,12 +26,12 @@ async def create_user(user: CustomUserInputSchema, db: Session = Depends(get_db)
 async def users_list(db: Session = Depends(get_db)):
     users_db = db.query(CustomUser).all()
     if not users_db:
-        raise HTTPException(detail='Такого пользователя нет.', status_code=404)
+        raise HTTPException(detail='No users.', status_code=404)
     return users_db
 
 @users_router.get('/{user_id}/', response_model=CustomUserOutSchema, summary='Get user by id', tags=['Users'])
 async def user_detail(user_id: int, db: Session = Depends(get_db)):
     user_db = db.query(CustomUser).filter(CustomUser.id==user_id).first()
     if not user_db:
-        raise HTTPException(detail='Такого пользователя нет.', status_code=404)
+        raise HTTPException(detail='User not founded with this id.', status_code=404)
     return user_db
