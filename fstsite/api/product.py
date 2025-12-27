@@ -35,3 +35,23 @@ async def product_detail(product_id: int, db: Session = Depends(get_db)):
     if not product_db:
         raise HTTPException(status_code=404, detail='Product not founded by this id.')
     return product_db
+
+@products_router.put('/{product_id/}', response_model=dict, summary='Change product.', tags=['Products'])
+async def product_update(product_id: int, product: ProductInputSchema, db: Session = Depends(get_db)):
+    product_db1 = db.query(Product).filter(Product.id==product_id).first()
+    if not product_db1:
+        raise HTTPException(status_code=404, detail='Product not founded by this id.')
+    for key, value in product.dict().items():
+        setattr(product, key, value)
+    db.commit()
+    db.refresh(product_db1)
+    return {'detail': 'Product has been changed.'}
+
+@products_router.delete('/{product_id}/', response_model=dict, summary='Delete product.', tags=['Products'])
+async def product_delete(product_id: int, db: Session = Depends(get_db)):
+    product_db2 = db.query(Product).filter(Product.id==product_id).first()
+    if not product_db2:
+        raise HTTPException(status_code=404, detail='Product not founded by this id.')
+    db.delete(product_db2)
+    db.commit()
+    return {'detail': 'Product has been deleted.'}

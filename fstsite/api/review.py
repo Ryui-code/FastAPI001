@@ -35,3 +35,23 @@ async def review_detail(review_id: int, db: Session = Depends(get_db)):
     if not review_db:
         raise HTTPException(status_code=404, detail='Review not founded by this id.')
     return review_db
+
+@reviews_router.put('/{review_id/}', response_model=dict, summary='Change review.', tags=['Reviews'])
+async def review_update(review_id: int, review: ReviewInputSchema, db: Session = Depends(get_db)):
+    review_db1 = db.query(Review).filter(Review.id==review_id).first()
+    if not review_db1:
+        raise HTTPException(status_code=404, detail='Review not founded by this id.')
+    for key, value in review.dict().items():
+        setattr(review_db1, key, value)
+    db.commit()
+    db.refresh(review_db1)
+    return {'detail': 'Review has been changed.'}
+
+@reviews_router.delete('/{review_id}/', response_model=dict, summary='Delete review.', tags=['Reviews'])
+async def review_delete(review_id: int, db: Session = Depends(get_db)):
+    review_db2 = db.query(Review).filter(Review.id==review_id).first()
+    if not review_db2:
+        raise HTTPException(status_code=404, detail='Review not founded by this id.')
+    db.delete(review_db2)
+    db.commit()
+    return {'detail': 'Review has been deleted.'}

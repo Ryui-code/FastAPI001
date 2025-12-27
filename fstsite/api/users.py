@@ -35,3 +35,23 @@ async def user_detail(user_id: int, db: Session = Depends(get_db)):
     if not user_db:
         raise HTTPException(detail='User not founded with this id.', status_code=404)
     return user_db
+
+@users_router.put('/{user_id/}', response_model=dict, summary='Change user.', tags=['Users'])
+async def user_update(user_id: int, user: CustomUserInputSchema, db: Session = Depends(get_db)):
+    user_db1 = db.query(CustomUser).filter(CustomUser.id==user_id).first()
+    if not user_db1:
+        raise HTTPException(status_code=404, detail='User not founded by this id.')
+    for key, value in user.dict().items():
+        setattr(user_db1, key, value)
+    db.commit()
+    db.refresh(user_db1)
+    return {'detail': 'User has been changed.'}
+
+@users_router.delete('/{user_id}/', response_model=dict, summary='Delete user.', tags=['Users'])
+async def user_delete(user_id: int, db: Session = Depends(get_db)):
+    user_db2 = db.query(CustomUser).filter(CustomUser.id==user_id).first()
+    if not user_db2:
+        raise HTTPException(status_code=404, detail='User not founded by this id.')
+    db.delete(user_db2)
+    db.commit()
+    return {'detail': 'User has been deleted.'}
