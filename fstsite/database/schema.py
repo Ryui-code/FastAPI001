@@ -1,11 +1,6 @@
 from typing import Optional
-from enum import Enum
 from pydantic import BaseModel, EmailStr, Field
 from datetime import date
-
-class StatusChoices(str, Enum):
-    active = 'active'
-    inactive = 'inactive'
 
 class CustomUserOutSchema(BaseModel):
     id: int
@@ -13,7 +8,6 @@ class CustomUserOutSchema(BaseModel):
     email: EmailStr
     age: Optional[int] = Field(ge=18, le=100)
     phone_number: Optional[str]
-    status: StatusChoices = StatusChoices.inactive
     data_registered: date
 class CustomUserInputSchema(BaseModel):
     username: str | int = Field(min_length=3, max_length=30)
@@ -21,7 +15,6 @@ class CustomUserInputSchema(BaseModel):
     email: EmailStr
     age: Optional[int] = Field(ge=18, le=100)
     phone_number: Optional[str]
-    status: StatusChoices = StatusChoices.inactive
 
 class CategoryInputSchema(BaseModel):
     category_image: str

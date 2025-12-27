@@ -1,13 +1,8 @@
-from enum import Enum as sqlEnum
-from typing import Optional
+from typing import Optional, List
 from datetime import date
-from sqlalchemy import Integer, String, Enum, Date, ForeignKey, Text
+from sqlalchemy import Integer, String, Date, ForeignKey, Text
 from .db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-class StatusChoices(str, sqlEnum):
-    active = "active"
-    inactive = "inactive"
 
 class CustomUser(Base):
     __tablename__ = 'custom_user'
@@ -18,8 +13,9 @@ class CustomUser(Base):
     password: Mapped[str] = mapped_column(String(20))
     age: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     phone_number: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    status: Mapped[StatusChoices] = mapped_column(Enum(StatusChoices), default=StatusChoices.inactive)
     data_registered: Mapped[date] = mapped_column(Date, default=date.today)
+
+    user_review: Mapped[List["Review"]] = relationship(back_populates="user", cascade='all, delete-orphan')
 
 class Category(Base):
     __tablename__ = 'category'
@@ -27,8 +23,6 @@ class Category(Base):
     id: Mapped[int] = mapped_column(Integer, autoincrement=True, primary_key=True)
     category_name: Mapped[str] = mapped_column(String(30), unique=True)
     category_image: Mapped[str] = mapped_column(String)
-
-    products: Mapped['Product'] = relationship("Product", back_populates="category", cascade='all, delete-orphan')
 
 class Product(Base):
     __tablename__ = 'product'
@@ -43,7 +37,8 @@ class Product(Base):
     product_video: Mapped[str] = mapped_column(String)
     created_date: Mapped[date] = mapped_column(Date, default=date.today)
 
-    category: Mapped[Category] = relationship(Category, back_populates='product_category')
+    product_review: Mapped[List["Review"]] = relationship("Review", back_populates="product")
+    category: Mapped[Category] = relationship(Category, back_populates='products_category')
 
 class Review(Base):
     __tablename__ = 'review'
@@ -55,4 +50,4 @@ class Review(Base):
     created_date: Mapped[date] = mapped_column(Date, default=date.today)
 
     user: Mapped[CustomUser] = relationship(CustomUser, back_populates='users_review')
-    product: Mapped[Product] = relationship(Product, back_populates='product_review')
+    product: Mapped[Product] = relationship(Product, back_populates='products_review')
