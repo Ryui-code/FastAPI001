@@ -20,7 +20,7 @@ async def create_review(review: ReviewSchema, db: Session = Depends(get_db)):
     db.add(review_db)
     db.commit()
     db.refresh(review_db)
-    return db
+    return review_db
 
 @reviews_router.get('/', response_model=List[ReviewSchema], summary='Get all reviews.', tags=['Reviews'])
 async def reviews_list(db: Session = Depends(get_db)):

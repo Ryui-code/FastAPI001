@@ -28,6 +28,8 @@ class Category(Base):
     category_name: Mapped[str] = mapped_column(String(30), unique=True)
     category_image: Mapped[str] = mapped_column(String)
 
+    products: Mapped['Product'] = relationship("Product", back_populates="category", cascade='all, delete-orphan')
+
 class Product(Base):
     __tablename__ = 'product'
 

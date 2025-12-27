@@ -20,7 +20,7 @@ async def create_user(user: CustomUserInputSchema, db: Session = Depends(get_db)
     db.add(user_db)
     db.commit()
     db.refresh(user_db)
-    return db
+    return user_db
 
 @users_router.get('/', response_model=List[CustomUserOutSchema], summary='Get all users', tags=['Users'])
 async def users_list(db: Session = Depends(get_db)):

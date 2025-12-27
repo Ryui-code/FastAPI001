@@ -20,7 +20,7 @@ async def create_product(product: ProductSchema, db: Session = Depends(get_db)):
     db.add(product_db)
     db.commit()
     db.refresh(product_db)
-    return db
+    return product_db
 
 @products_router.get('/', response_model=List[ProductSchema], summary='Get all products.', tags=['Products'])
 async def products_list(db: Session = Depends(get_db)):

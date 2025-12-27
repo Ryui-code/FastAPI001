@@ -9,8 +9,7 @@ class StatusChoices(str, Enum):
 
 class CustomUserOutSchema(BaseModel):
     id: int
-    username: str | int = Field(min_length=3, max_length=30)
-    password: int | str = Field(min_length=6, max_length=30)
+    username: str = Field(min_length=3, max_length=30)
     email: EmailStr
     age: Optional[int] = Field(ge=18, le=100)
     phone_number: Optional[str]
