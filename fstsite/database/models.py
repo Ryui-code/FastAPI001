@@ -1,8 +1,13 @@
 from typing import Optional, List
 from datetime import date
-from sqlalchemy import Integer, String, Date, ForeignKey, Text
+from sqlalchemy import Integer, String, Date, ForeignKey, Text, Enum
 from .db import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from enum import Enum as PyEnum
+
+class StatusChoices(str, PyEnum):
+    active = 'active'
+    inactive = 'inactive'
 
 class CustomUser(Base):
     __tablename__ = 'custom_user'
@@ -13,6 +18,7 @@ class CustomUser(Base):
     password: Mapped[str] = mapped_column(String(20))
     age: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     phone_number: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    status: Mapped[StatusChoices] = mapped_column(Enum(StatusChoices), default=StatusChoices.inactive)
     data_registered: Mapped[date] = mapped_column(Date, default=date.today)
 
     user_review: Mapped[List["Review"]] = relationship(back_populates="user", cascade='all, delete-orphan')
