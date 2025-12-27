@@ -30,6 +30,8 @@ class Category(Base):
     category_name: Mapped[str] = mapped_column(String(30), unique=True)
     category_image: Mapped[str] = mapped_column(String)
 
+    products_category: Mapped[List["Product"]] = relationship("Product", back_populates="category", cascade="all, delete-orphan")
+
 class Product(Base):
     __tablename__ = 'product'
 
@@ -55,5 +57,5 @@ class Review(Base):
     stars: Mapped[int] = mapped_column(Integer)
     created_date: Mapped[date] = mapped_column(Date, default=date.today)
 
-    user: Mapped[CustomUser] = relationship(CustomUser, back_populates='users_review')
-    product: Mapped[Product] = relationship(Product, back_populates='products_review')
+    user: Mapped[CustomUser] = relationship(CustomUser, back_populates='user_review')
+    product: Mapped[Product] = relationship(Product, back_populates='product_review')
